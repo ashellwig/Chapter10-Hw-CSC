@@ -1,0 +1,260 @@
+%
+% Module 5 Chapter 10 Homework
+% CSC160-C00: Computer Science I (C++)
+% Author: Ashton Hellwig
+%
+
+
+\documentclass[a4paper, 10pt]{article}
+
+
+  % Packages
+  \usepackage[utf8]{inputenc}       % Encoding
+  \usepackage[english]{babel}       % Internationalization
+  \usepackage{soul}                 % Highlighting
+  \usepackage{hyperref}             % Links (internal and external)
+  \usepackage{fancyhdr}             % Headers and footers
+  \usepackage[dvipsnames]{xcolor}   % Text Colors
+  \usepackage{listings}             % Code Snippets
+  \usepackage{algorithm}            % For TOC support
+  \usepackage{algorithmicx}         % Algorithmic notation support
+  \usepackage{algpseudocode}        % Algorithmic notation environments
+  \usepackage{enumitem}             % Ordered lists
+  \usepackage{geometry}             % Page layout
+  \usepackage{graphicx}             % Image support
+  \usepackage[toc, page]{appendix}  % Appendix
+  \usepackage{bookmark}
+  \usepackage{adjustbox}
+  \usepackage{csquotes}
+  \usepackage{amsthm}
+  \usepackage{array}
+  \usepackage{makecell}
+  \usepackage{amsmath}
+  \usepackage{amssymb}
+  \usepackage{relsize}
+  \usepackage{multicol}
+  \usepackage{etoolbox,refcount}
+  \usepackage{parcolumns}
+  \usepackage{mdframed}
+
+%   \UseRawInputEncoding
+
+  % Tables
+  \renewcommand\theadalign{bc}
+  \renewcommand\theadfont{\bfseries}
+  \renewcommand\theadgape{\Gape[4pt]}
+  \renewcommand\cellgape{\Gape[4pt]}
+
+  % Lists
+  \newcounter{countitems}
+  \newcounter{nextitemizecount}
+  \newcommand{\setupcountitems}{%
+    \stepcounter{nextitemizecount}%
+    \setcounter{countitems}{0}%
+    \preto\item{\stepcounter{countitems}}%
+  }
+  \makeatletter
+  \newcommand{\computecountitems}{%
+    \edef\@currentlabel{\number\c@countitems}%
+    \label{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+  }
+  \newcommand{\nextitemizecount}{%
+    \getrefnumber{countitems@\number\c@nextitemizecount}%
+  }
+  \newcommand{\previtemizecount}{%
+    \getrefnumber{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+  }
+  \makeatother    
+  \newenvironment{AutoMultiColItemize}{%
+  \ifnumcomp{\nextitemizecount}{>}{3}{\begin{multicols}{2}}{}%
+  \setupcountitems\begin{itemize}}%
+  {\end{itemize}%
+  \unskip\computecountitems\ifnumcomp{\previtemizecount}{>}{3}{\end{multicols}}{}}
+
+
+
+  % Colors
+  \newcommand{\commentstylecolor}{\color{Gray}}
+  \newcommand{\keywordstylecolor}{\color{MidnightBlue}}
+  \newcommand{\stringstylecolor}{\color{ForestGreen}}
+  \newcommand{\questioninput}{\color{Red}}
+  \newcommand{\answertcolor}{\color{Green}}
+  \newcommand{\myanswer}{\answertcolor{\hl}}
+
+  % Symbols
+  \newcommand{\answerflow}{\rotatebox[origin=c]{180}{$\Lsh$}}
+  \newcommand{\toanswer}{\mathlarger{\mathlarger{\answerflow}}\quad}
+
+  % Math
+  \newcommand{\highlight}[1]{%
+    \colorbox{green!50}{$\displaystyle#1$}}
+
+  % Image Directory
+  \graphicspath{ {screenshots/} }
+
+
+  % Hyperlink Setup
+  \hypersetup{
+    colorlinks = true,
+    urlcolor = blue,
+    linkcolor = blue
+  }
+
+
+  % Syntax-Highlighting for Code Snippets
+  \lstset{
+    backgroundcolor=\color{white},
+    breaklines=true,%
+    captionpos=b,%
+    frame=tlrb,%
+    tabsize=4,%
+    % numbers=left,%
+    showstringspaces=false,%
+    commentstyle=\commentstylecolor,%
+    keywordstyle=\keywordstylecolor,%
+    stringstyle=\stringstylecolor%
+  }
+  \lstset{literate=
+  {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+  {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+  {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+  {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+  {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+  {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+  {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+  {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+  {ű}{{\H{u}}}1 {Ű}{{\H{U}}}1 {ő}{{\H{o}}}1 {Ő}{{\H{O}}}1
+  {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+  {€}{{\euro}}1 {£}{{\pounds}}1 {«}{{\guillemotleft}}1
+  {»}{{\guillemotright}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1
+}
+  \newenvironment{alltt}{\ttfamily}{\par}
+
+
+  % Page Configuration
+  %% Style
+  \pagestyle{fancy}
+
+  %% Layout
+  \geometry{%
+  a4paper,%
+  top=2.5cm,%
+  bottom=2.5cm,%
+  left=2.5cm,%
+  right=2.5cm%
+  }
+  \setlength{\headheight}{72pt}
+  \setlength{\floatsep}{72pt}
+
+  %% Title page
+  \title{Module 5 Chapter 9 Homework}
+  \author{Ashton Hellwig}
+  \date\today
+  \setcounter{tocdepth}{3}
+
+  %% Subsequent pages
+  \lhead{CSC160}
+  \rhead{Computer Science I (C++)}
+  \lfoot{M5C9HW}
+  \rfoot{A. Hellwig}
+
+ 
+  % Document Content
+\begin{document}
+  \maketitle
+  \tableofcontents
+  \lstlistoflistings
+  \newpage
+
+  % Question 1
+  \section{Question 1}
+    Consider the following declarations:
+    
+      \begin{lstlisting}[language=c++,caption={Data Structure for \texttt{fruitType}}]
+class bagType { 
+public: 
+  void set(string, double, double, double, double); 
+  void print() const; 
+  string getStyle() const; 
+  double getPrice() const; 
+  void get(double, double, double, double); 
+  bagType(); 
+  bagType(string, double, double, double, double); 
+private: 
+  string style; 
+  double l; 
+  double w; 
+  double h; 
+  double price; 
+}; 
+bagType newBag;       //variable declaration
+      \end{lstlisting}
+      
+      \begin{enumerate}[label=\Alph*.]
+          \item How many members does class bagType have?
+          \item How many private members does class bagType have?
+          \item How many constructors does class bagType have?
+          \item How many constant functions does class bagType have?
+          \item Which constructor is used to initialize the object newBag?
+      \end{enumerate}
+    % Question 1 Solution
+    \subsection{Solution}
+      \begin{enumerate}[label=\alph*.]
+          \item How many members does class bagType have?%
+            \begin{mdframed}[backgroundcolor=green!20]
+              12, unless \texttt{constructors} are not considered member functions,
+                in that case, 10.
+            \end{mdframed}
+          \item How many private members does class bagType have?%
+            \begin{mdframed}[backgroundcolor=green!20]
+              5
+            \end{mdframed}
+          \item How many constructors does class bagType have?%
+            \begin{mdframed}[backgroundcolor=green!20]
+              2
+            \end{mdframed}
+          \item How many constant functions does class bagType have?%
+            \begin{mdframed}[backgroundcolor=green!20]
+              3
+            \end{mdframed}
+          \item Which constructor is used to initialize the object newBag?%
+            \begin{mdframed}[backgroundcolor=green!20]
+              \lstinline[language=c++,columns=fixed]%
+                {bagType(); // Default constructor}
+            \end{mdframed}
+      \end{enumerate}
+
+
+  \newpage
+  % Question 2
+  \section{Question 2}
+    Placeholder
+    % Question 2 Solution
+    \subsection{Solution}
+      Placeholder
+
+%   \newpage
+  % Question 3
+  \section{Question 3}
+    % Question 3 Solution
+    \subsection{Solution}
+
+
+  %  \newpage
+  % Question 4
+  \section{Question 4}
+    % Question 4 Solution
+    \subsection{Solution}
+
+%   \newpage
+  % Question 5
+  \section{Question 5}
+    % Question 5 Solution
+    \subsection{Solution}
+
+
+%   \newpage
+%   \appendix
+%   \section{Question }
+\end{document}
